@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { User } from "lucide-react";
 import GFIcon from "../styles/icons/gf_icon.png";
-import veganIcon from "../styles/icons/v_icon.png";
+import veganIcon from "../styles/icons/V_icon.png";
 import veggieIcon from "../styles/icons/veg_icon2.png";
 
 import ProductoModal from "../components/productoModal";
