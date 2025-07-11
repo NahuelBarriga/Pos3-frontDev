@@ -132,7 +132,10 @@ function Sidebar({ isOpen, onClose, newPedidoActivity, newReservaActivity, newLa
         {/* Header */}
         <div
           className="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-orange-100 cursor-pointer"
-          onClick={() => { !user ? navigate("/login") : navigate("/config")}}
+          onClick={() => { 
+            !user ? navigate("/login") : navigate("/config"); 
+            onClose();
+          }}
         >
           <div className="flex flex-col space-y-1">
             <h2 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Bienvenido!</h2>
