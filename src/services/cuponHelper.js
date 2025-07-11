@@ -1,5 +1,5 @@
 import api from "./api";
-import CuponDTO from "../models/CuponDTO";
+import CuponDTO from "../models/cuponDTO";
 
 const cupon_URL = '/cupon'; // Adjust this if your API base URL is different
 
