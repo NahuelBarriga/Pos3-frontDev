@@ -1,12 +1,8 @@
 import axios from "axios";
-import { API_PORT } from "../config";
-import { useAuth } from "../context/authContext";
 
-const API_URL = `http://localhost:${API_PORT}/api`; // URL base de la API
+const API_URL = `https://pixelcafe-fye3hqena8gwergr.chilecentral-01.azurewebsites.net/`; // URL base de la API
 const API_CONFIG = `/config`;
-export const API_sUrl = `http://localhost:${API_PORT}/`;
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 export const api = axios.create({
   //baseURL: API_BASE_URL,
