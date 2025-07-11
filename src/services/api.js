@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = `https://pixelcafe-fye3hqena8gwergr.chilecentral-01.azurewebsites.net/`; // URL base de la API
+export const API_URL = `https://pixelcafe-fye3hqena8gwergr.chilecentral-01.azurewebsites.net/`; // URL base de la API
 const API_CONFIG = `/config`;
 
 
@@ -50,8 +50,8 @@ api.interceptors.response.use(
         if (error.config.url && error.config.url.includes('/auth/refresh')) {
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
-          if (window.location.pathname !== '/login') {
-            window.location.href = "/login";
+          if (window.location.pathname !== '/login' && typeof window.reactNavigate === 'function') {
+            window.reactNavigate('/login');
           }
           return Promise.reject(error);
         }
@@ -60,8 +60,8 @@ api.interceptors.response.use(
         if (error.config._retry) {
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
-          if (window.location.pathname !== '/login') {
-            window.location.href = "/login";
+          if (window.location.pathname !== '/login' && typeof window.reactNavigate === 'function') {
+            window.reactNavigate('/login');
           }
           return Promise.reject(error);
         }
@@ -81,20 +81,22 @@ api.interceptors.response.use(
         }else{
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
-          if (window.location.pathname !== '/login') {
-            window.location.href = "/login";
+          if (window.location.pathname !== '/login' && typeof window.reactNavigate === 'function') {
+            window.reactNavigate('/login');
           }
         }
       } catch (refreshError) {
         localStorage.removeItem("token");
         localStorage.removeItem("userId");
-        if (window.location.pathname !== '/login') {
-          window.location.href = "/login";
+        if (window.location.pathname !== '/login' && typeof window.reactNavigate === 'function') {
+          window.reactNavigate('/login');
         }
       }
     }
     if (error.response && error.response.status === 403) {
-      window.location.href = "/nonAuthorized";
+      if (typeof window.reactNavigate === 'function') {
+        window.reactNavigate('/nonAuthorized');
+      }
     }
     return Promise.reject(error);
   }

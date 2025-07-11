@@ -12,7 +12,7 @@ const OAuthCallback = () => {
   useEffect(() => {
     if (!loading) {
       if (user) {
-        window.location.href = "/"
+        navigate("/")
       } else {
         // If we're not loading and don't have a user, something went wrong
         setError('No se pudo completar la autenticación. Por favor intente nuevamente.');

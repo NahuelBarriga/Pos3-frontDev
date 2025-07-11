@@ -19,7 +19,7 @@ export default function RenderNonAuthorized() {
   }, []);
 
 const handleRedirect = () => {
-    window.location.href = "/";
+    window.location.replace("/");
 };
 
   return (

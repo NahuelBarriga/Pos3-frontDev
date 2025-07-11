@@ -144,7 +144,8 @@ export const AuthProvider = ({ children }) => {
 
   // Función para login con Google: redirige al endpoint del backend que inicia el flujo con Passport.
   const googleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:3000/api'}${API_URL}/google`;
+    const backendBase = import.meta.env.VITE_API_URL;
+    window.location.href = `${backendBase}/auth/google`;
   };
 
   // Función para solicitar restablecimiento de contraseña
