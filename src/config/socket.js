@@ -21,11 +21,17 @@ socket.on("disconnect", () => {
 
 socket.on("connect_error", (error) => {
     console.error("❌ Error al conectar con WebSockets:", error.message);
-    // Intenta reconectar manualmente
-    setTimeout(() => {
-      console.log("🔄 Intentando reconectar...");
-      socket.connect();
-    }, 3000);
+    // Intenta reconectar manualmente hasta 5 veces
+    if (!socket._reconnectAttempts) socket._reconnectAttempts = 0;
+    socket._reconnectAttempts++;
+    if (socket._reconnectAttempts <= 5) {
+      setTimeout(() => {
+        console.log(`🔄 Intentando reconectar... (Intento ${socket._reconnectAttempts}/5)`);
+        socket.connect();
+      }, 3000);
+    } else {
+      console.error("❌ No se pudo reconectar después de 5 intentos.");
+    }
   });
 
 export default socket;
