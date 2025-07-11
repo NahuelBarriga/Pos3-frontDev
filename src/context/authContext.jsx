@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }) => {
   // Función para login con Google: redirige al endpoint del backend que inicia el flujo con Passport.
   const googleLogin = () => {
     const backendBase = import.meta.env.GOOGLE_CALLBACK_URL;
-    window.location.href = backendBase;
+    window.location.href = 'https://pixelcafe-fye3hqena8gwergr.chilecentral-01.azurewebsites.net/api/auth/google/callback'; //!cambiar a env
   };
 
   // Función para solicitar restablecimiento de contraseña
