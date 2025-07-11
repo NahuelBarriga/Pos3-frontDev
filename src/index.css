@@ -1,0 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(32, 32, 32, 0.87);
+  background-color: #3b3b3b;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  margin: 0;
+  /* display: flex;
+  place-items: center; */
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+tittle {
+  font-size: 3.2em;
+  font-weight: 600;
+
+  line-height: 1.1;
+}
+
+
+h1 {
+  font-size: 3.2em;
+  font-weight: 600;
+  color: #464646;
+
+  line-height: 1.1;
+}
+
+p { 
+  font-size: 1.2em;
+  font-weight: 400;
+  color: #252525;
+
+  line-height: 1.5;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  color: #ffffff;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* Enhanced styling for date and time inputs */
+
+/* Date input styling */
+input[type="date"] {
+  color: #1f2937 !important; /* dark gray text */
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  position: relative;
+}
+
+input[type="date"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #f97316; /* orange focus ring */
+  border-color: #f97316;
+}
+
+/* Calendar icon visibility */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) grayscale(1); /* Dark gray-800 icon */
+  opacity: 1;
+  cursor: pointer;
+  padding: 2px;
+  margin-left: 4px;
+}
+
+/* Date field text parts */
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="date"]::-webkit-datetime-edit-text {
+  color: #1f2937 !important;
+  background-color: transparent;
+}
+
+/* Placeholder and disabled state */
+input[type="date"]:disabled,
+input[type="date"]::placeholder {
+  color: #6b7280 !important;
+  opacity: 0.7;
+}
+
+/* Time input styling */
+input[type="time"] {
+  color: #1f2937 !important; /* dark gray text */
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  position: relative;
+}
+
+input[type="time"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #f97316; /* orange focus ring */
+  border-color: #f97316;
+}
+
+/* Clock icon visibility */
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) grayscale(1); /* Dark gray-800 icon */
+  opacity: 1;
+  cursor: pointer;
+  padding: 2px;
+  margin-left: 4px;
+}
+
+/* Time field text parts */
+input[type="time"]::-webkit-datetime-edit-hour-field,
+input[type="time"]::-webkit-datetime-edit-minute-field,
+input[type="time"]::-webkit-datetime-edit-ampm-field,
+input[type="time"]::-webkit-datetime-edit-text {
+  color: #1f2937 !important;
+  background-color: transparent;
+}
+
+/* Placeholder and disabled state for time */
+input[type="time"]:disabled,
+input[type="time"]::placeholder {
+  color: #6b7280 !important;
+  opacity: 0.7;
+}
+
+/* Special class for dark backgrounds */
+.date-input-dark,
+.time-input-dark {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #1f2937 !important;
+  border: 1px solid #9ca3af;
+}
+
+.date-input-dark::-webkit-calendar-picker-indicator,
+.time-input-dark::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) grayscale(1); /* Dark gray-800 icon for dark backgrounds */
+  opacity: 1;
+}
+
+/* Transparent background support */
+input[type="date"].bg-transparent,
+input[type="time"].bg-transparent {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Override any conflicting styles */
+input[type="date"].bg-gray-100,
+input[type="time"].bg-gray-100 {
+  background-color: #f3f4f6 !important;
+  color: #1f2937 !important;
+}
+
+/* Additional fixes for date/time inputs in different scenarios */
+
+/* Ensure all date/time inputs have proper text visibility in forms */
+form input[type="date"],
+form input[type="time"] {
+  color: #1f2937 !important;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* Fix for date/time inputs in modals and overlays */
+.modal input[type="date"],
+.modal input[type="time"],
+.overlay input[type="date"],
+.overlay input[type="time"] {
+  background-color: white !important;
+  color: #1f2937 !important;
+  border: 1px solid #d1d5db;
+}
+
+/* Ensure icons are always visible in input fields */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) grayscale(1); /* Dark gray-800 icon */
+  background-size: 16px 16px;
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+/* Fix for inputs with specific Tailwind classes that might override */
+input[type="date"].border,
+input[type="time"].border {
+  color: #1f2937 !important;
+}
+
+input[type="date"].bg-gray-50,
+input[type="time"].bg-gray-50 {
+  background-color: #f9fafb !important;
+  color: #1f2937 !important;
+}
+
+/* Hover states for better UX */
+input[type="date"]:hover,
+input[type="time"]:hover {
+  border-color: #9ca3af;
+}
+
+/* Disabled state styling */
+input[type="date"]:disabled,
+input[type="time"]:disabled {
+  background-color: #f3f4f6 !important;
+  color: #6b7280 !important;
+  cursor: not-allowed;
+}
+
+input[type="date"]:disabled::-webkit-calendar-picker-indicator,
+input[type="time"]:disabled::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+

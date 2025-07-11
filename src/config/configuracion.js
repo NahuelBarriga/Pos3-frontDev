@@ -1,0 +1,1 @@
+export const zona = 'America/Argentina/Buenos_Aires'; // Zona horaria para Argentina
