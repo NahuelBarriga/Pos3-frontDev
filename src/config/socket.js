@@ -31,6 +31,7 @@ socket.on("connect_error", (error) => {
       }, 3000);
     } else {
       console.error("❌ No se pudo reconectar después de 5 intentos.");
+      socket.io.opts.reconnection = false;
     }
   });
 
