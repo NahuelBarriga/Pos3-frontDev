@@ -23,9 +23,6 @@ import PrivateRoute from "./components/privateRoute";
 import { useState } from "react";
 
 function App() {
-  const [newPedidoActivity, setNewPedidoActivity] = useState(false);
-  const [newReservaActivity, setNewReservaActivity] = useState(false);
-  const [newLayoutActivity, setNewLayoutActivity] = useState(false);
 
   // Puedes usar context o props drilling para actualizar estos estados desde sockets
   return (
