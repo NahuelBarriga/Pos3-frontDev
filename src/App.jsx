@@ -17,7 +17,7 @@ import RenderLayout from "./pages/layout";
 import RenderConfig from "./pages/config";
 import RenderNonAuthorized from "./context/nonAuthorized";
 import RenderComanda from "./pages/comanda"; // Import the new component
-import "./app.css";
+import "./App.css";
 
 import PrivateRoute from "./components/privateRoute";
 import { useState } from "react";
