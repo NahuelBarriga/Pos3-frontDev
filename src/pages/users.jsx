@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/authContext";
 import { getUsuarios, addEmpleado, modificarEmpleado } from "../services/usersHelper";
-import Modal from "../components/modal";
 import { Filter, X } from "lucide-react";
 import { toast } from "react-toastify";
 

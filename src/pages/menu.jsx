@@ -21,7 +21,7 @@ import ProductoModal from "../components/productoModal";
 import MesaModal from "../components/mesaModal";
 import Modal from "../components/modal";
 import LoadingScreen from "../components/utils/LoadingScreen";
-import HelpModal from "../components/modals/helpModal";
+import HelpModal from "../components/modals/HelpModal";
 
 function RenderMenu() {
   const [menu, setMenu] = useState([]);
