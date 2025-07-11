@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_URL = import.meta.env.VITE_URL_API; // URL base de la API
+export const API_URL = import.meta.env.VITE_API_URL; // URL base de la API
 const API_CONFIG = `/config`;
 
 

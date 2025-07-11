@@ -1,7 +1,6 @@
 import { io } from "socket.io-client";
-import { API_PORT } from "../config.js";
 
-const socket = io(import.meta.env.VITE_URL_API, {
+const socket = io(import.meta.env.VITE_API_URL, {
     transports: ["polling", "websocket"], // Primero polling y luego websocket para mayor compatibilidad
     reconnection: false,
     reconnectionAttempts: 10,

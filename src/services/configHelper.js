@@ -3,7 +3,6 @@ import userDTO from "../models/userDTO";
 import pedidoDTO from '../models/pedidoResDTO';
 import reservaDTO from '../models/reservaResDTO';
 import provDTO from '../models/provFormDTO';
-import {API_PORT, MODO_PRUEBA} from '../config';
 import categoriaFormDTO from '../models/categoriaFormDTO';
 import CuponDTO from '../models/cuponDTO';
 

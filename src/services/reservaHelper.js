@@ -2,7 +2,6 @@ import api from './api';
 import ReservaResDTO from '../models/reservaResDTO';
 import ReservaFormDTO from '../models/reservaFormDTO';
 import socket from "../config/socket";
-import {API_PORT, MODO_PRUEBA} from '../config';
 
 const API_URL = `/reservas`;
 

@@ -1,7 +1,6 @@
 import api from './api';
 import ItemResDTO from '../models/itemResDTO';
 import ItemFormDTO from '../models/itemFormDTO';
-import { API_PORT, MODO_PRUEBA } from '../config';
 
 const API_URL = `/items`;
 const API_CONFIG = `/config`;
@@ -11,8 +10,11 @@ export const getMenu = async () => {
 
   try {
     const response = await api.get(`${API_URL}/menu`);
-    console.log(response.data.map(ItemResDTO.fromJson));
-    return response.data.map(ItemResDTO.fromJson);
+    console.log("Menu fetched successfully:", response.data);
+    if (response) {
+      console.log(response.data.map(ItemResDTO.fromJson));
+      return response.data.map(ItemResDTO.fromJson);
+    }
   } catch (error) {
     console.error("Error al obtener el menú:", error);
     return [];

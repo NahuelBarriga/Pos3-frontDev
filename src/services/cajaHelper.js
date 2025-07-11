@@ -1,7 +1,7 @@
-import {API_PORT, MODO_PRUEBA} from '../config';
 import api from './api';
 import movResDTO from '../models/movResDTO.js';
 import movFormDTO from '../models/movFormDTO.js';
+import { MODO_PRUEBA } from '../config.js';
 
 const USE_MOCK = MODO_PRUEBA; // Cambia a false cuando conectes la API real
 const API_URL = `/caja`;

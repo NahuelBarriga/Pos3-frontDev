@@ -1,6 +1,6 @@
 import api from './api';
 import userDTO from "../models/userDTO";
-import {API_PORT, MODO_PRUEBA} from '../config';
+import {MODO_PRUEBA} from '../config';
 
 const API_URL = `/users`;
 

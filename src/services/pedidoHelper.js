@@ -2,7 +2,7 @@ import axios from "axios";
 import api from './api';
 import pedidoDTO from '../models/pedidoResDTO';
 import socket from "../config/socket";
-import { API_PORT, MODO_PRUEBA } from '../config';
+import { MODO_PRUEBA } from '../config';
 
 const API_URL = `/pedidos`;
 
