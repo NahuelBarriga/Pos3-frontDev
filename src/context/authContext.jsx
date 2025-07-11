@@ -12,9 +12,7 @@ const API_URL = `/auth`;
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Estado del usuario
   const [token, setToken] = useState(localStorage.getItem('token') || null); //usa el token del localstorage, si existe
-  const [refreshToken, setRefreshToken] = useState(null); // We don't store refreshToken in localStorage anymore
   const [loading, setLoading] = useState(true);
-  //const { limpiarCarrito } = useCarrito();
   
   useEffect(() => { //imprimir el usuario
     console.log("AuthContext - El usuario ha cambiado:", user ? { id: user.id, cargo: user.cargo, nombre: user.nombre } : null);
@@ -95,7 +93,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post(`${API_URL}/login`, { email, password });
       setToken(res.data.token);
-      setRefreshToken(res.data.refreshToken);
       localStorage.setItem('token', res.data.token);
       setUser(res.data.user);
       return res.data;
@@ -144,8 +141,8 @@ export const AuthProvider = ({ children }) => {
 
   // Función para login con Google: redirige al endpoint del backend que inicia el flujo con Passport.
   const googleLogin = () => {
-    const backendBase = import.meta.env.GOOGLE_CALLBACK_URL;
-    window.location.href = 'https://pixelcafe-fye3hqena8gwergr.chilecentral-01.azurewebsites.net/api/auth/google/callback'; //!cambiar a env
+    const backendBase = import.meta.env.VITE_GOOGLE_CALLBACK_URL;
+    window.location.href = backendBase;
   };
 
   // Función para solicitar restablecimiento de contraseña
