@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '../context/authContext';
 import { useState, useEffect } from "react";
 import CoffeePromotionCard from './sideBar/tarjetaPromocion'
@@ -20,6 +20,7 @@ const scrollbarHideStyle = `
 
 function Sidebar({ isOpen, onClose, newPedidoActivity, newReservaActivity, newLayoutActivity }) {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [mostrarModal, setMostrarModal] = useState(false);
 
   // Navigation links organized by user role
@@ -31,7 +32,8 @@ function Sidebar({ isOpen, onClose, newPedidoActivity, newReservaActivity, newLa
           setMostrarModal(true);
           onClose();
         } else { 
-          window.location.href = "/login";
+          onClose();
+          navigate("/login");
         }
       }
     }
@@ -130,7 +132,7 @@ function Sidebar({ isOpen, onClose, newPedidoActivity, newReservaActivity, newLa
         {/* Header */}
         <div
           className="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-orange-100 cursor-pointer"
-          onClick={() => { !user ? window.location.href = "/login" : window.location.href = "/config"}}
+          onClick={() => { !user ? navigate("/login") : navigate("/config")}}
         >
           <div className="flex flex-col space-y-1">
             <h2 className="text-sm font-medium text-gray-600 uppercase tracking-wide">Bienvenido!</h2>
