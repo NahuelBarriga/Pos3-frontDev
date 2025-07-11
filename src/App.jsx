@@ -17,7 +17,6 @@ import RenderLayout from "./pages/layout";
 import RenderConfig from "./pages/config";
 import RenderNonAuthorized from "./context/nonAuthorized";
 import RenderComanda from "./pages/comanda"; // Import the new component
-import MaintenancePage from "./pages/maintenance";
 import "./App.css";
 
 import PrivateRoute from "./components/privateRoute";
@@ -28,14 +27,9 @@ function App() {
   const [newReservaActivity, setNewReservaActivity] = useState(false);
   const [newLayoutActivity, setNewLayoutActivity] = useState(false);
 
-  const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === "true";
-
   // Puedes usar context o props drilling para actualizar estos estados desde sockets
   return (
     <div className="w-full min-h-screen bg-gray-100">
-      {isMaintenance ? (
-        <MaintenancePage />
-      ) : (
       <AuthProvider>
         <NotificationProvider>
           <CarritoProvider>
@@ -143,7 +137,7 @@ function App() {
             </PedidosProvider>
           </CarritoProvider>
         </NotificationProvider>
-      </AuthProvider> )};
+      </AuthProvider>
     </div>
   );
 }
