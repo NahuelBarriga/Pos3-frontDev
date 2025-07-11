@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Trash2, EyeOff, Eye, Pencil, ChevronLeft, ChevronRight, Plus, Minus, ImageOff } from "lucide-react"
 import MesaModal from "./mesaModal"
 import GFIcon from "../styles/icons/gf_icon.png";
-import veganIcon from "../styles/icons/v_icon.png";
+import veganIcon from "../styles/icons/V_icon.png";
 import veggieIcon from "../styles/icons/veg_icon2.png";;
 
 function ProductoModal({ producto, onClose, onEdit, onDelete, onStock, user, onAddToCart, cant, mesa, onSetMesa }) {
