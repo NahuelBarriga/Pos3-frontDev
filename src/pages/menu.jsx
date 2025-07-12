@@ -48,18 +48,6 @@ function RenderMenu() {
   // Para filtrar por tags dietéticos
   const [activeFilters, setActiveFilters] = useState([]);
 
-  // Socket utility functions para mejorar la legibilidad y mantenimiento
-  // Centraliza las emisiones de eventos siguiendo la convención entity:action del resto de la app
-  const socketEvents = {
-    // Emitir eventos de socket - usando convención entity:action 
-    notifyItemUpdated: (itemId) => {
-      socket.emit("item:actualizado", { itemId });
-    },
-    notifyMenuUpdated: () => {
-      socket.emit("menu:actualizado");
-    }
-  };
-
   //mesas
   const [mesaInfo, setMesaInfo] = useState({ tipo: "", numero: "" });
   const [showMesaModal, setShowMesaModal] = useState(false);
@@ -85,6 +73,9 @@ function RenderMenu() {
       toast.error("Error al refrescar el menú");
     }
   };
+
+
+  
 
   // Función para verificar si un item cumple con los filtros activos
   const passesFilters = (item) => {
@@ -155,28 +146,37 @@ function RenderMenu() {
       }
     }
 
-    // Configurar los listeners de Socket.io usando convención entity:action
-    // Todos los eventos relacionados con el menú, items y reservas que requieren refrescar la UI
-    const socketHandlers = {
-      "menu:actualizado": refresh,      // Cuando el menú completo cambia
-      "reserva:nueva": refresh,         // Nueva reserva puede afectar disponibilidad
-      "reserva:eliminada": refresh,     // Reserva eliminada puede afectar disponibilidad  
-      "reserva:actualizada": refresh,   // Reserva actualizada puede afectar disponibilidad
-      "item:actualizado": refresh,      // Item específico actualizado (precio, disp, etc.)
-    };
-
-    // Registrar todos los listeners
-    Object.entries(socketHandlers).forEach(([event, handler]) => {
-      socket.on(event, handler);
+    socket.on("item:creado", (itemUpdate) => {
+      setMenu((prevMenu) =>
+        [...prevMenu, itemUpdate]
+      );
+    });
+    socket.on("item:eliminado", (itemId) => {
+      setMenu((prevMenu) =>
+        prevMenu.filter((item) => item.id !== itemId)
+      );
+    });
+    socket.on("item:actualizado", () => { 
+      refresh();
+    });
+    socket.on("item:estadoActualizado", (itemId) => { 
+      setMenu((prevMenu) =>
+        prevMenu.map((item) =>
+          item.id === itemId ? { ...item, disp: !item.disp } : item
+        )
+      );
     });
 
-    // Cleanup function
+
+
+
     return () => {
-      // Limpiar todos los listeners de socket
-      Object.keys(socketHandlers).forEach((event) => {
-        socket.off(event);
-      });
-    };
+      socket.off("item:creado");
+      socket.off("item:eliminado");
+      socket.off("item:actualizado");
+      socket.off("item:estadoActualizado"); 
+      socket.off("itemImagenActualizada");
+    }
   }, []);
 
   // Organizar el menú por categorías

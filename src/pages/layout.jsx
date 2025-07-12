@@ -787,7 +787,7 @@ const TableManager = () => {
 
   // Filtrar mesas por piso actual
   const mesasActuales = mesas.filter(
-    (mesa) => mesa.pisoId === currentFloor.pisoId
+    (mesa) => mesa?.pisoId === currentFloor?.pisoId
   );
 
   // Obtener el plan de fondo actual
@@ -1099,7 +1099,7 @@ const TableManager = () => {
       estado: "disponible",
       locacion: { x: 150, y: 150 },
       size: { width: 80, height: 80 },
-      pisoId: currentFloor.pisoId,
+      pisoId: currentFloor?.pisoId,
     };
     setHasChanges(true);
     setMesas([...mesas, newMesa]);
@@ -1147,10 +1147,10 @@ const TableManager = () => {
   const handleSaveBackground = async (lines) => {
     setIsEditingBackground(false);
 
-    const response = await saveFloorPlan(lines, currentFloor.pisoId);
+    const response = await saveFloorPlan(lines, currentFloor?.pisoId);
     if (response.status === 200 || response.status === 201) {
       const updatedFloorPlans = floorPlans.map((floor) =>
-        floor.pisoId === currentFloor.pisoId
+        floor.pisoId === currentFloor?.pisoId
           ? { ...floor, lines: lines }
           : floor
       );
@@ -1176,8 +1176,8 @@ const TableManager = () => {
     if (response && (response?.status === 200 || response?.status === 201)) {
       const newFloor = {
         lines: null,
-        pisoId: response.data.id,
-        descripcion: response.data.descripcion,
+        pisoId: response.data?.id,
+        descripcion: response.data?.descripcion,
       };
       setFloorPlans([...floorPlans, newFloor]);
       setCurrentFloor(newFloor);
@@ -1193,7 +1193,7 @@ const TableManager = () => {
     try {
       if (floorPlans.length > 1) {
         const tablesInCurrentFloor = mesas.filter(
-          (mesa) => mesa.pisoId === currentFloor.pisoId
+          (mesa) => mesa?.pisoId === currentFloor?.pisoId
         );
         if (tablesInCurrentFloor.length > 0) {
           toast.error(
@@ -1201,10 +1201,10 @@ const TableManager = () => {
           );
           return;
         }
-        const response = await deleteFloor(currentFloor.pisoId);
+        const response = await deleteFloor(currentFloor?.pisoId);
         if (response.status === 200) {
           const remainingFloors = floorPlans.filter(
-            (f) => f.pisoId !== currentFloor.pisoId
+            (f) => f?.pisoId !== currentFloor?.pisoId
           );
           setFloorPlans(remainingFloors);
 
@@ -1344,7 +1344,7 @@ const TableManager = () => {
   };
 
   const handleChangeFloor = (newFloorId) => {
-    const floorObject = floorPlans.find((floor) => floor.pisoId === newFloorId);
+    const floorObject = floorPlans.find((floor) => floor?.pisoId === newFloorId);
     if (floorObject) {
       setCurrentFloor(floorObject);
       setSelectedMesa(null);
@@ -1389,7 +1389,7 @@ const TableManager = () => {
                   </span>
                   <div className="flex items-center gap-2">
                     <select
-                      value={currentFloor.pisoId || 1}
+                      value={currentFloor?.pisoId || 1}
                       onChange={(e) =>
                         !isEditingBackground &&
                         handleChangeFloor(parseInt(e.target.value))
@@ -1402,8 +1402,8 @@ const TableManager = () => {
                       }`}
                     >
                       {floorPlans.map((floor, index) => (
-                        <option key={index} value={floor.pisoId}>
-                          {floor.descripcion || `Piso ${floor.pisoId}`}
+                        <option key={index} value={floor?.pisoId}>
+                          {floor.descripcion || `Piso ${floor?.pisoId}`}
                         </option>
                       ))}
                     </select>
@@ -1671,6 +1671,7 @@ const TableManager = () => {
         mesa={selectedMesa}
         onSave={handleMesaEdit}
         floorPlansLenght={floorPlans.length}
+        mesas={mesas}
       />
 
       <MesaStatusModal

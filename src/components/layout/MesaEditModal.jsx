@@ -1,22 +1,58 @@
 import React, { useState, useEffect } from 'react';
 
-const MesaEditModal = ({ user, visible, onClose, mesa, onSave, floorPlansLenght }) => {
+const MesaEditModal = ({ user, visible, onClose, mesa, onSave, floorPlansLenght, mesas }) => {
   const [mesaEdit, setMesaEdit] = useState({ ...mesa });
+  const [numeroError, setNumeroError] = useState('');
 
   useEffect(() => {
     if (visible && mesa) {
       setMesaEdit({ ...mesa });
+      setNumeroError('');
     }
   }, [visible, mesa]);
 
   if (!visible || !mesa) return null;
 
   const handleChange = (e) => {
-    setMesaEdit({ ...mesaEdit, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setMesaEdit({ ...mesaEdit, [name]: value });
+    
+    // Validar duplicados para el campo numero
+    if (name === 'numero') {
+      validateNumero(value);
+    }
+  };
+
+  const validateNumero = (numero) => {
+    if (!numero.trim()) {
+      setNumeroError('');
+      return true;
+    }
+
+    // Verificar si existe otro mesa con el mismo número (excluyendo la mesa actual)
+    const existingMesa = mesas.find(m => 
+      m.numero?.toString() === numero.toString() && m.id !== mesa.id
+    );
+
+    if (existingMesa) {
+      setNumeroError(`Ya existe una mesa con el número ${numero}`);
+      return false;
+    } else {
+      setNumeroError('');
+      return true;
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Validar el número antes de guardar
+    const isNumeroValid = validateNumero(mesaEdit.numero);
+    
+    if (!isNumeroValid) {
+      return; // No guardar si hay error de validación
+    }
+
     onSave(mesaEdit);
     onClose();
   };
@@ -45,8 +81,13 @@ const MesaEditModal = ({ user, visible, onClose, mesa, onSave, floorPlansLenght 
               name="numero"
               value={mesaEdit.numero || ''}
               onChange={handleChange}
-              className="w-full p-2 rounded bg-gray-700 text-gray-100"
+              className={`w-full p-2 rounded bg-gray-700 text-gray-100 ${
+                numeroError ? 'border-2 border-red-500' : ''
+              }`}
             />
+            {numeroError && (
+              <p className="text-red-400 text-sm mt-1">{numeroError}</p>
+            )}
           </div>
           {floorPlansLenght > 0 && (
             <div className="mb-4">
@@ -101,7 +142,14 @@ const MesaEditModal = ({ user, visible, onClose, mesa, onSave, floorPlansLenght 
             </button>
             <button
               onClick={handleSubmit}
-              type="submit" className="px-4 py-2 bg-green-700 rounded hover:bg-green-600">
+              type="submit" 
+              disabled={!!numeroError}
+              className={`px-4 py-2 rounded ${
+                numeroError 
+                  ? 'bg-gray-600 cursor-not-allowed' 
+                  : 'bg-green-700 hover:bg-green-600'
+              }`}
+            >
               Guardar
             </button>
           </div>
