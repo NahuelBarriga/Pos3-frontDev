@@ -251,7 +251,7 @@ function Carrito() {
                       Total del pedido
                     </p>
                     <p className="font-bold text-base sm:text-lg text-gray-800">
-                      ${pedido.total.toFixed(2)}
+                      ${pedido.total?.toFixed(2)}
                     </p>
                   </div>
                   <div className="bg-transparent rounded-lg p-2 sm:p-3">
@@ -282,7 +282,7 @@ function Carrito() {
                         </span>
                         <span className="flex-1 border-b border-dotted border-gray-300 mx-2"></span>
                         <span className="font-semibold text-gray-800 whitespace-nowrap">
-                          ${(item.precio * item.cantidad).toFixed(2)}
+                          ${(item.precio * item.cantidad)?.toFixed(2)}
                         </span>
                       </li>
                     ))}
@@ -317,7 +317,7 @@ function Carrito() {
                   💰 Total a pagar:
                 </span>
                 <span className="text-green-700 font-bold text-xl sm:text-2xl">
-                  ${calcularTotalPedidosAprobados().toFixed(2)}
+                  ${calcularTotalPedidosAprobados()?.toFixed(2)}
                 </span>
               </div>
               <button
@@ -489,10 +489,10 @@ function Carrito() {
                           </div>
                         </td>
                         <td className="text-right py-4 px-2 text-gray-800 font-medium">
-                          ${item.precio.toFixed(2)}
+                          ${item.precio?.toFixed(2)}
                         </td>
                         <td className="text-right py-4 px-2 text-gray-800 font-semibold">
-                          ${(item.precio * item.cantidad).toFixed(2)}
+                          ${(item.precio * item.cantidad)?.toFixed(2)}
                         </td>
                       </tr>
                     ))}
@@ -506,7 +506,7 @@ function Carrito() {
                   <div className="flex justify-between items-center text-gray-700">
                     <span className="font-medium">Subtotal:</span>
                     <span className="font-semibold">
-                      ${calcularTotal().toFixed(2)}
+                      ${calcularTotal()?.toFixed(2)}
                     </span>
                   </div>
                   {descuentoAplicado && (
@@ -522,7 +522,7 @@ function Carrito() {
                           ? (
                               calcularTotal() *
                               (descuentoAplicado?.descuento / 100)
-                            ).toFixed(2)
+                            )?.toFixed(2)
                           : (descuentoAplicado?.descuento).toFixed(2)}
                       </span>
                     </div>
@@ -530,7 +530,7 @@ function Carrito() {
                   <div className="flex justify-between items-center text-xl font-bold text-gray-800 pt-2 border-t border-gray-200">
                     <span>Total:</span>
                     <span className="text-naranja">
-                      ${totalConDescuento().toFixed(2)}
+                      ${totalConDescuento()?.toFixed(2)}
                     </span>
                   </div>
                 </div>
