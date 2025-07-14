@@ -21,6 +21,16 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    // Fix for SPA routing - serve index.html for all non-static routes
+    historyApiFallback: true,
+  },
+  // For production builds - ensure SPA routing works
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
   },
   publicDir: 'public', // Directorio para archivos estáticos
 })

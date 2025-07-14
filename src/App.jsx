@@ -17,17 +17,19 @@ import RenderLayout from "./pages/layout";
 import RenderConfig from "./pages/config";
 import RenderNonAuthorized from "./context/nonAuthorized";
 import RenderComanda from "./pages/comanda"; // Import the new component
+import NotFound from "./components/NotFound"; // Import the new 404 component
+import OAuthCallback from "./pages/OAuthCallback"; // Import OAuth callback
 import "./App.css";
 
 import PrivateRoute from "./components/privateRoute";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [newPedidoActivity, setNewPedidoActivity] = useState(false);
   const [newReservaActivity, setNewReservaActivity] = useState(false);
   const [newLayoutActivity, setNewLayoutActivity] = useState(false);
 
-  // Puedes usar context o props drilling para actualizar estos estados desde sockets
   return (
     <div className="w-full min-h-screen bg-gray-100">
       <AuthProvider>
@@ -35,103 +37,10 @@ function App() {
           <CarritoProvider>
             <PedidosProvider>
               <Router>
-                <Navbar
+                <AppContent 
                   newPedidoActivity={newPedidoActivity}
                   newReservaActivity={newReservaActivity}
                   newLayoutActivity={newLayoutActivity}
-                />
-                <Routes>
-                  <Route path="/" element={<RenderMenu />} />
-                  <Route path="/login" element={<RenderLogin />} />
-                  <Route path="/carrito" element={<RenderCarrito />} />
-                  <Route path="/config" element={<RenderConfig />} />
-
-                  <Route
-                    path="/caja"
-                    element={
-                      <PrivateRoute
-                        allowedRoles={["admin", "cajero", "encargado"]}
-                      >
-                        <RenderCaja />
-                      </PrivateRoute>
-                    }
-                  />
-                  {/* <Route path="/mesas" element={
-              <PrivateRoute  allowedRoles={['admin', 'cajero', 'encargado', 'mozo']}> 
-                <RenderMesasLayout />
-              </PrivateRoute> 
-            } /> */}
-                  <Route
-                    path="/pedidos"
-                    element={
-                      <PrivateRoute allowedRoles={["admin", "encargado"]}>
-                        <RenderPedidos />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="/users"
-                    element={
-                      <PrivateRoute allowedRoles={["admin"]}>
-                        <RenderUsuarios />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="/reservas"
-                    element={
-                      <PrivateRoute
-                        allowedRoles={["admin", "encargado", "mozo"]}
-                      >
-                        <RenderReservas />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="/stats"
-                    element={
-                      <PrivateRoute allowedRoles={["admin"]}>
-                        <RenderStats />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="/layout"
-                    element={
-                      <PrivateRoute
-                        allowedRoles={["admin", "cajero", "encargado", "mozo"]}
-                      >
-                        <RenderLayout />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="/comanda"
-                    element={
-                      <PrivateRoute
-                        allowedRoles={["admin", "encargado", "mozo"]}
-                      >
-                        <RenderComanda />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="/nonAuthorized"
-                    element={<RenderNonAuthorized />}
-                  />
-                  <Route path="*" element={<RenderNonAuthorized />} />
-                </Routes>
-                <ToastContainer
-                  position="top-right"
-                  autoClose={3000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="light"
                 />
               </Router>
             </PedidosProvider>
@@ -139,6 +48,124 @@ function App() {
         </NotificationProvider>
       </AuthProvider>
     </div>
+  );
+}
+
+// Separate component to access useNavigate inside Router
+function AppContent({ newPedidoActivity, newReservaActivity, newLayoutActivity }) {
+  const navigate = useNavigate();
+
+  // Set up navigation function for API interceptors
+  useEffect(() => {
+    window.reactNavigate = navigate;
+    return () => {
+      delete window.reactNavigate;
+    };
+  }, [navigate]);
+
+  // Puedes usar context o props drilling para actualizar estos estados desde sockets
+  return (
+    <>
+      <Navbar
+        newPedidoActivity={newPedidoActivity}
+        newReservaActivity={newReservaActivity}
+        newLayoutActivity={newLayoutActivity}
+      />
+      <Routes>
+        <Route path="/" element={<RenderMenu />} />
+        <Route path="/login" element={<RenderLogin />} />
+        <Route path="/carrito" element={<RenderCarrito />} />
+        <Route path="/config" element={<RenderConfig />} />
+        <Route path="/oauth-callback" element={<OAuthCallback />} />
+
+        <Route
+          path="/caja"
+          element={
+            <PrivateRoute
+              allowedRoles={["admin", "cajero", "encargado"]}
+            >
+              <RenderCaja />
+            </PrivateRoute>
+          }
+        />
+        {/* <Route path="/mesas" element={
+              <PrivateRoute  allowedRoles={['admin', 'cajero', 'encargado', 'mozo']}> 
+                <RenderMesasLayout />
+              </PrivateRoute> 
+            } /> */}
+        <Route
+          path="/pedidos"
+          element={
+            <PrivateRoute allowedRoles={["admin", "encargado"]}>
+              <RenderPedidos />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <PrivateRoute allowedRoles={["admin"]}>
+              <RenderUsuarios />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/reservas"
+          element={
+            <PrivateRoute
+              allowedRoles={["admin", "encargado", "mozo"]}
+            >
+              <RenderReservas />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/stats"
+          element={
+            <PrivateRoute allowedRoles={["admin"]}>
+              <RenderStats />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/layout"
+          element={
+            <PrivateRoute
+              allowedRoles={["admin", "cajero", "encargado", "mozo"]}
+            >
+              <RenderLayout />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/comanda"
+          element={
+            <PrivateRoute
+              allowedRoles={["admin", "encargado", "mozo"]}
+            >
+              <RenderComanda />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/nonAuthorized"
+          element={<RenderNonAuthorized />}
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 }
 
