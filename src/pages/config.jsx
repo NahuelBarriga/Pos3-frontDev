@@ -61,7 +61,14 @@ export default function RenderConfig() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
-  const [cafeConfig, setCafeConfig] = useState(null);
+  const [cafeConfig, setCafeConfig] = useState({ 
+    nombreCafe: '',
+    direccion: '',
+    telefono: '',
+    horarioApertura: '',
+    horarioCierre: '',
+    horarioCierreCocina: '',
+  });
 
   // Estado para controlar las secciones expandidas
   const [expandedSections, setExpandedSections] = useState({
