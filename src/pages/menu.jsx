@@ -12,7 +12,7 @@ import { useCarrito } from "../context/carritoContext";
 import socket from "../config/socket";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { User } from "lucide-react";
+import { User, Armchair } from "lucide-react";
 import GFIcon from "../styles/icons/gf_icon.png";
 import veganIcon from "../styles/icons/V_icon.png";
 import veggieIcon from "../styles/icons/veg_icon2.png";
@@ -48,17 +48,6 @@ function RenderMenu() {
   // Para filtrar por tags dietéticos
   const [activeFilters, setActiveFilters] = useState([]);
 
-  // Socket utility functions para mejorar la legibilidad y mantenimiento
-  // Centraliza las emisiones de eventos siguiendo la convención entity:action del resto de la app
-  const socketEvents = {
-    // Emitir eventos de socket - usando convención entity:action 
-    notifyItemUpdated: (itemId) => {
-      socket.emit("item:actualizado", { itemId });
-    },
-    notifyMenuUpdated: () => {
-      socket.emit("menu:actualizado");
-    }
-  };
 
   //mesas
   const [mesaInfo, setMesaInfo] = useState({ tipo: "", numero: "" });
@@ -71,14 +60,18 @@ function RenderMenu() {
   const [showPromoButton, setShowPromoButton] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState(null);
 
-  //estado para el boton de ayuda
+  //estado para el boton de ayuda 
   const [showHelpButton, setShowHelpButton] = useState(false);
+  //estado para el boton de mesa 
+  const [showMesaButton, setShowMesaButton] = useState(false);
+
 
 
   // Función para refrescar el menú
   const refresh = async () => {
     try {
       const updatedMenu = await getMenu();
+      toast.info("menu actualizado");
       setMenu(updatedMenu);
     } catch (error) {
       console.error("Error al refrescar el menú:", error);
@@ -155,28 +148,42 @@ function RenderMenu() {
       }
     }
 
-    // Configurar los listeners de Socket.io usando convención entity:action
-    // Todos los eventos relacionados con el menú, items y reservas que requieren refrescar la UI
-    const socketHandlers = {
-      "menu:actualizado": refresh,      // Cuando el menú completo cambia
-      "reserva:nueva": refresh,         // Nueva reserva puede afectar disponibilidad
-      "reserva:eliminada": refresh,     // Reserva eliminada puede afectar disponibilidad  
-      "reserva:actualizada": refresh,   // Reserva actualizada puede afectar disponibilidad
-      "item:actualizado": refresh,      // Item específico actualizado (precio, disp, etc.)
-    };
-
-    // Registrar todos los listeners
-    Object.entries(socketHandlers).forEach(([event, handler]) => {
-      socket.on(event, handler);
+    socket.on("item:creado", ({item}) => { 
+      toast.success(`Nuevo item disponible ${item.nombre}`);
+      setMenu((prevMenu) => [...prevMenu, item]);
     });
 
-    // Cleanup function
+    socket.on("item:actualizado", refresh);
+
+    socket.on("item:eliminado", ({id}) => { 
+      setMenu((prevMenu) => prevMenu.filter((item) => item.id != id));
+      if (productoSeleccionado?.id == id) {
+        setProductoSeleccionado(null);
+      }
+    });
+
+    socket.on("item:estadoActualizado", ({ id }) => { 
+      setMenu((prevMenu) =>
+        prevMenu.map((item) =>
+          item.id === id ? { ...item, disp: !item.disp } : item
+        )
+      );
+      if (productoSeleccionado?.id === id) {
+        setProductoSeleccionado((prev) => ({
+          ...prev,
+          disp: !prev.disp,
+        }));
+      }
+      setProductoSeleccionado(null); // Reset selected product
+      toast.info("Estado del item actualizado");
+    });
+
     return () => {
-      // Limpiar todos los listeners de socket
-      Object.keys(socketHandlers).forEach((event) => {
-        socket.off(event);
-      });
-    };
+      socket.off("item:creado");
+      socket.off("item:actualizado");
+      socket.off("item:eliminado");
+      socket.off("item:estadoActualizado");
+    }
   }, []);
 
   // Organizar el menú por categorías
@@ -221,17 +228,7 @@ function RenderMenu() {
   // Maneja la visibilidad de items (actualiza disp)
   const handleDisp = async (producto) => {
     try {
-      const response = await updateItemDisp(producto.id, !producto.disp);
-      if (response.status === 200) {
-        toast.success("Estado del ítem actualizado correctamente");
-
-        // Emitir evento de Socket para notificar cambio de disp
-        socketEvents.notifyItemUpdated(producto.id);
-
-        // Refrescar la interfaz
-        refresh();
-        setProductoSeleccionado(null);
-      }
+      await updateItemDisp(producto.id, !producto.disp);
     } catch (error) {
       console.error("Error al actualizar el disp:", error);
       toast.error("Error al actualizar disponibilidad");
@@ -268,14 +265,10 @@ function RenderMenu() {
       if (response.status === 200) {
         toast.success("Ítem eliminado correctamente");
 
-        // Emitir evento de menú actualizado
-        socketEvents.notifyMenuUpdated();
-
         setShowDeleteConfirm(false);
         setItemToDelete(null);
         setProductoSeleccionado(null);
         setMostrarModal(false);
-        refresh(); //!ver pq no funciona nada
       }
     } catch (error) {
       console.error("Error al eliminar el ítem:", error);
@@ -304,7 +297,6 @@ function RenderMenu() {
         setProductoSeleccionado(null);
         setMostrarModal(false);
         // Emitir evento de menú actualizado
-        socketEvents.notifyMenuUpdated();
         handleCloseModal();
         refresh();
       }
@@ -532,11 +524,10 @@ function RenderMenu() {
             <div className="flex gap-2 flex-wrap">
               {/* Tags para filtrar */}
               <button
-                className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                  activeFilters.includes("GF")
-                    ? "bg-blue-600 text-white"
-                    : "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                }`}
+                className={`px-3 py-1 rounded-full text-sm transition-colors ${activeFilters.includes("GF")
+                  ? "bg-blue-600 text-white"
+                  : "bg-blue-100 text-blue-800 hover:bg-blue-200"
+                  }`}
                 onClick={() => {
                   setActiveFilters((prev) =>
                     prev.includes("GF")
@@ -548,11 +539,10 @@ function RenderMenu() {
                 Sin TACC
               </button>
               <button
-                className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                  activeFilters.includes("Veg")
-                    ? "bg-green-600 text-white"
-                    : "bg-green-100 text-green-800 hover:bg-green-200"
-                }`}
+                className={`px-3 py-1 rounded-full text-sm transition-colors ${activeFilters.includes("Veg")
+                  ? "bg-green-600 text-white"
+                  : "bg-green-100 text-green-800 hover:bg-green-200"
+                  }`}
                 onClick={() => {
                   setActiveFilters((prev) =>
                     prev.includes("Veg")
@@ -564,11 +554,10 @@ function RenderMenu() {
                 Vegetariano
               </button>
               <button
-                className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                  activeFilters.includes("V")
-                    ? "bg-purple-600 text-white"
-                    : "bg-purple-100 text-purple-800 hover:bg-purple-200"
-                }`}
+                className={`px-3 py-1 rounded-full text-sm transition-colors ${activeFilters.includes("V")
+                  ? "bg-purple-600 text-white"
+                  : "bg-purple-100 text-purple-800 hover:bg-purple-200"
+                  }`}
                 onClick={() => {
                   setActiveFilters((prev) =>
                     prev.includes("V")
@@ -589,11 +578,10 @@ function RenderMenu() {
                 .map((cat) => (
                   <button
                     key={cat.id}
-                    className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                      activeFilters.includes(cat.nombre)
-                        ? "bg-orange-400 text-white"
-                        : "bg-orange-100 text-orange-800 hover:bg-orange-200"
-                    }`}
+                    className={`px-3 py-1 rounded-full text-sm transition-colors ${activeFilters.includes(cat.nombre)
+                      ? "bg-orange-400 text-white"
+                      : "bg-orange-100 text-orange-800 hover:bg-orange-200"
+                      }`}
                     onClick={() => {
                       setActiveFilters((prev) =>
                         prev.includes(cat.nombre)
@@ -648,11 +636,10 @@ function RenderMenu() {
                     {visibleItems.map((item) => (
                       <div
                         key={item.id}
-                        className={`flex-shrink-0 overflow-hidden shadow-md rounded-2xl p-4 text-center transition-all w-72 cursor-pointer menu-card ${
-                          item.disp === false
-                            ? "bg-gray-300 opacity-70"
-                            : "bg-white hover:shadow-lg"
-                        }`}
+                        className={`flex-shrink-0 overflow-hidden shadow-md rounded-2xl p-4 text-center transition-all w-72 cursor-pointer menu-card ${item.disp === false
+                          ? "bg-gray-300 opacity-70"
+                          : "bg-white hover:shadow-lg"
+                          }`}
                         onClick={() => setProductoSeleccionado(item)}
                       >
                         <div className="flex h-32">
@@ -740,19 +727,31 @@ function RenderMenu() {
       )}
 
       {/* Botón flotante de mesa seleccionada (solo para clientes) */}
-      {user?.cargo === "cliente" && mesaInfo?.numero && (
-        <button 
-          className="fixed bottom-5 left-5 bg-blue-600 text-white p-4 rounded-full shadow-lg text-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center z-40"
-          onClick={() => setShowHelpButton(true)}
-          title={`Mesa ${mesaInfo.numero}`}
-        >
-          <User size={24} />
-        </button>
+      {user?.cargo === "cliente" && (
+        <div>
+          {mesaInfo?.numero ? (
+            <button
+              className="fixed bottom-5 left-5 bg-blue-600 text-white p-4 rounded-full shadow-lg text-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center z-40"
+              onClick={() => setShowHelpButton(true)}
+              title={`Mesa ${mesaInfo.numero}`}
+            >
+              <User size={24} />
+            </button>
+          ) : (
+            <button
+              className="fixed bottom-5 left-5 bg-green-600 text-white p-4 rounded-full shadow-lg text-lg hover:bg-green-700 transition-all duration-300 flex items-center justify-center z-40"
+              onClick={() => setShowMesaButton(true)}
+              title={`Mesa ${mesaInfo.numero}`}
+            >
+              <Armchair size={24} />
+            </button>
+          )}
+        </div>
       )}
 
       {/* Botón para agregar ítem (solo admin) */}
       {user?.cargo === "admin" && (
-        <div 
+        <div
           className="fixed bottom-5 right-5 flex flex-col gap-2"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -973,11 +972,10 @@ function RenderMenu() {
                   {/* Botón para agregar imágenes */}
                   <div className="mt-2">
                     <label
-                      className={`cursor-pointer flex items-center justify-center w-full py-2 px-3 rounded-lg text-sm ${
-                        imagenesPreview.length >= 5
-                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          : "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-sm"
-                      }`}
+                      className={`cursor-pointer flex items-center justify-center w-full py-2 px-3 rounded-lg text-sm ${imagenesPreview.length >= 5
+                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-sm"
+                        }`}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1149,6 +1147,16 @@ function RenderMenu() {
           isOpen={showHelpButton}
           onClose={() => setShowHelpButton(false)}
           mesaInfo={mesaInfo}
+        />
+      )}
+      {showMesaButton && (
+        <MesaModal
+          infoMesa={mesaInfo || null}
+          onSetMesaInfo={handleSetMesa}
+          visible={true}
+          onClose={() => {
+            setShowMesaButton(false);
+          }}
         />
       )}
     </div>

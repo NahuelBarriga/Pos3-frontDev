@@ -23,6 +23,7 @@ import {
 import { toast } from "react-toastify";
 import { obtenerEstiloEstado } from "../utils/estadoUtils";
 
+
 // Helper function to get proper state labels
 const obtenerLabelEstado = (estado) => {
   const labels = {
@@ -34,7 +35,7 @@ const obtenerLabelEstado = (estado) => {
     listo: "Listo",
     pago_pendiente: "Pago Pendiente",
   };
-  return labels[estado] || estado.charAt(0).toUpperCase() + estado.slice(1);
+  return labels[estado] || estado?.charAt(0).toUpperCase() + estado?.slice(1);
 };
 
 function Carrito() {
@@ -108,6 +109,7 @@ function Carrito() {
       };
 
       const response = await postPedido(pedidoNuevo);
+      console.log("Pedido enviado en carrito:", response.data); //! Debugging line
 
       // Limpiar el carrito
       limpiarCarrito();
@@ -224,7 +226,7 @@ function Carrito() {
                     <div className="min-w-0">
                       <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                         <span className="text-gray-800 font-bold text-base sm:text-lg">
-                          Pedido #{pedido.id.toString().substring(0, 8)}
+                          Pedido #{pedido.id?.toString().substring(0, 8)}
                         </span>
                         <span className="text-sm text-gray-600">
                           {pedido.hora}

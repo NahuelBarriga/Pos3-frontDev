@@ -23,9 +23,10 @@ const plainAxios = axios.create({
 api.interceptors.request.use(async (config) => {
   const token = localStorage.getItem("token");
   const configData = await getConfigData();
-  if (configData && configData.nombreCafe) {
-    config.headers["nombreCafe"] = configData.nombreCafe.replace(/\s+/g, '');
-  }
+  // if (configData && configData.nombreCafe) {
+  //   config.headers["nombreCafe"] = configData.nombreCafe.replace(/\s+/g, '');
+  // }
+  config.headers["nombreCafe"] = "pixelCafe"; //!mock
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

@@ -14,17 +14,12 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || null); //usa el token del localstorage, si existe
   const [loading, setLoading] = useState(true);
   
-  useEffect(() => { //imprimir el usuario
-    console.log("AuthContext - El usuario ha cambiado:", user ? { id: user.id, cargo: user.cargo, nombre: user.nombre } : null);
-    console.log("AuthContext - loading state:", loading);
-  }, [user, loading]);
+  
 
   // Consolidated token handling from URL (both normal and OAuth callback)
   useEffect(() => {
-    console.log("AuthContext - Initial useEffect - token from localStorage:", token);
     const params = new URLSearchParams(window.location.search);
     const tokenFromUrl = params.get('token');
-    console.log("AuthContext - token from URL:", tokenFromUrl);
     
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
@@ -36,38 +31,28 @@ export const AuthProvider = ({ children }) => {
     
     // Only set loading to false if there's no token to validate
     if (!token && !tokenFromUrl) {
-      console.log("AuthContext - No token found, setting loading to false");
       setLoading(false);
-    } else {
-      console.log("AuthContext - Token found, keeping loading true until validation");
     }
   }, []);
 
   useEffect(() => { //si hay token, obtengo los datos del usuario
-    console.log("AuthContext - Token validation useEffect triggered, token:", token);
     if (token) {
-      console.log("AuthContext - Token exists, fetching user data");
       api
         .get(`${API_URL}/me`)
         .then((res) => {
-          console.log("AuthContext - User data fetched successfully:", res.data.user);
           setUser(res.data.user);
           localStorage.setItem('userId', res.data.user.id); // Guardar el ID del usuario en localStorage
         })
         .catch(error => {
-          console.error("AuthContext - Error fetching user data:", error);
           if (error.response && error.response.status === 401) {
             // Token invalid or expired
-            console.log("AuthContext - Token invalid, logging out");
             logout();
           }
         })
         .finally(() => {
-          console.log("AuthContext - User validation complete, setting loading to false");
           setLoading(false);
         });
     } else {
-      console.log("AuthContext - No token, setting loading to false");
       setLoading(false);
     }
   }, [token]);
@@ -83,7 +68,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', res.data.token);
       return true;
     } catch (error) {
-      console.error('Error al refrescar el token:', error);
       logout();
       return false;
     }
@@ -97,7 +81,6 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data.user);
       return res.data;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };
@@ -106,7 +89,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const usuario = new clienteDTO({ email, password, nombre, telefono, cumpleanos });
       const res = await api.post(`${API_URL}/register`, usuario);
-      console.log("res.data", res.data.user); //!sacar
       setToken(res.data.token);
       //setRefreshToken(res.data.refreshToken);
       localStorage.setItem('token', res.data.token);
@@ -114,7 +96,6 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data.user);
       return res.data;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };
@@ -134,7 +115,6 @@ export const AuthProvider = ({ children }) => {
       // window.location.href = "/";
       // localStorage.removeItem("refreshToken");
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };
@@ -151,7 +131,6 @@ export const AuthProvider = ({ children }) => {
       const res = await api.post(`${API_URL}/forgot-password`, { email });
       return res.data;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };

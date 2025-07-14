@@ -1,6 +1,7 @@
 import api from './api';
 import ItemResDTO from '../models/itemResDTO';
 import ItemFormDTO from '../models/itemFormDTO';
+import socket from "../config/socket";
 
 const API_URL = `/items`;
 const API_CONFIG = `/config`;
@@ -95,8 +96,7 @@ export const updateItem = async (itemUpdate) => {
 
 export const updateItemDisp = async (id, estado) => {
   try {
-    const response = await api.patch(`${API_URL}/${id}/stock`, { stock: estado });
-    return response;
+    socket.emit("item:cambiarEstado", { id });
   } catch (error) {
     console.error('Error en la solicitud: ', error);
     return null;
@@ -106,7 +106,6 @@ export const updateItemDisp = async (id, estado) => {
 export const deleteItem = async (id) => {
   try {
     const response = await api.delete(`${API_URL}/${id}`);
-    console.log(response.status, response.data);
     return response;
   } catch (error) {
     console.error('Error en la solicitud: ', error);

@@ -62,6 +62,7 @@ export const PedidosProvider = ({ children }) => {
 
   const crearPedido = (pedido) => {
     setPedidos((prevPedidos) => [...prevPedidos, pedido]);
+    console.log("Pedido creado:", pedido); //! Debugging line
     toast.success("Pedido enviado, esperando confirmacion");
   };
 
