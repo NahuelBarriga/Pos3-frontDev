@@ -22,7 +22,7 @@ const plainAxios = axios.create({
 // Interceptor para agregar el token JWT en cada request
 api.interceptors.request.use(async (config) => {
   const token = localStorage.getItem("token");
-  const configData = await getConfigData();
+  //const configData = await getConfigData();
   // if (configData && configData.nombreCafe) {
   //   config.headers["nombreCafe"] = configData.nombreCafe.replace(/\s+/g, '');
   // }
