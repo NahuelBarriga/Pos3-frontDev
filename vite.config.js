@@ -13,11 +13,11 @@ export default defineConfig({
     port: 5173, // Vite dev server
     proxy: {
       '/api': {
-        target: 'http://localhost:3000', // Tu backend
+        target: import.meta.env.VITE_SOCKET_URL, // Tu backend
         changeOrigin: true,
       },
       '/uploads': {
-        target: 'http://localhost:3000', // Para acceder a imágenes o archivos estáticos
+        target: import.meta.env.VITE_SOCKET_URL, // Para acceder a imágenes o archivos estáticos
         changeOrigin: true,
       },
     },
