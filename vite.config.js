@@ -18,11 +18,11 @@ export default defineConfig(({ command, mode }) => {
       port: 5173, // Vite dev server //!pasar a env variable
       proxy: {
         '/api': {
-          target: 'https://pixelcafe-fye3hqena8gwergr.chilecentral-01.azurewebsites.net', // Tu backend
+          target: 'https://pixelcafe-fye3hqena8gwergr.chilecentral-01.azurewebsites.net', // Tu backend //!pasar a env variable
           changeOrigin: true,
         },
         '/uploads': {
-          target: 'https://pixelcafe-fye3hqena8gwergr.chilecentral-01.azurewebsites.net', // Para acceder a imágenes o archivos estáticos
+          target: 'https://pixelcafe-fye3hqena8gwergr.chilecentral-01.azurewebsites.net', // Para acceder a imágenes o archivos estáticos //!pasar a env variable
           changeOrigin: true,
         },
       },
