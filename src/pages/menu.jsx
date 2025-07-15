@@ -645,7 +645,7 @@ function RenderMenu() {
                         <div className="flex h-32">
                           <div className="w-1/2 bg-gray-200 rounded-2xl relative">
                             <img
-                              src={`${import.meta.env.VITE_SOCKET_URL}/${item.imagenes[0]}` || null}
+                              src={`${import.meta.env.VITE_IMG_URL}/${item.imagenes[0]}` || null}
                               alt={item.nombre || null}
                               className="w-full h-full object-cover rounded-lg"
                             ></img>
@@ -933,7 +933,7 @@ function RenderMenu() {
                           className="relative h-20 rounded-lg overflow-hidden border border-gray-200"
                         >
                           <img
-                            src={`${import.meta.env.VITE_SOCKET_URL}/${img.preview}`}
+                            src={`${import.meta.env.VITE_IMG_URL}/${img.preview}`}
                             alt={`Vista previa ${index + 1}`}
                             className="w-full h-full object-cover"
                           />
