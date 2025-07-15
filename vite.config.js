@@ -18,11 +18,11 @@ export default defineConfig(({ command, mode }) => {
       port: 5173, // Vite dev server
       proxy: {
         '/api': {
-          target: env.VITE_SOCKET_URL, // Tu backend
+          target: process.env.VITE_SOCKET_URL, // Tu backend
           changeOrigin: true,
         },
         '/uploads': {
-          target: env.VITE_SOCKET_URL, // Para acceder a imágenes o archivos estáticos
+          target: process.env.VITE_SOCKET_URL, // Para acceder a imágenes o archivos estáticos
           changeOrigin: true,
         },
       },
