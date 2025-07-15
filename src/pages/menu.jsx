@@ -933,7 +933,7 @@ function RenderMenu() {
                           className="relative h-20 rounded-lg overflow-hidden border border-gray-200"
                         >
                           <img
-                            src={img.preview}
+                            src={`${import.meta.env.VITE_SOCKET_URL}/${img.preview}`}
                             alt={`Vista previa ${index + 1}`}
                             className="w-full h-full object-cover"
                           />
