@@ -462,7 +462,7 @@ function RenderMenu() {
       menuPorCategoria.every((cat) => cat.items.length === 0));
 
   return (
-    <div className="min-h-screen bg-blue-500 flex flex-col items-center h-full w-full min-h-scree p-5">
+    <div className="min-h-screen bg-gris flex flex-col items-center h-full w-full min-h-scree p-5">
       <h1 className="text-3xl font-bold text-naranja mb-5">
         Menú de Pixel Café
       </h1>
