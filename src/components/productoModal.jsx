@@ -87,7 +87,7 @@ function ProductoModal({ producto, onClose, onEdit, onDelete, onStock, user, onA
                 {producto.imagenes?.map((img, index) => (
                   <div key={index} className="w-full h-72 flex-shrink-0">
                     <img
-                      src={`${import.meta.env.VITE_IMG_URL}${img}`}
+                      src={`${img}`}
                       alt={`${producto.name} - imagen ${index + 1}`}
                       className="w-full h-full object-cover"
                     />

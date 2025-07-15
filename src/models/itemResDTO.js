@@ -8,7 +8,7 @@ class ItemResDTO {
         this.disp = disp;
         this.tag = tag != '' ? tag.split(',').map(t => t.trim()) : []; //array de tags
         //this.ingredientes = Array.isArray(ingredientes) ? ingredientes.map(String) : []; 
-        this.imagenes = Array.isArray(imagenes)? imagenes : [];
+        this.imagenes = Array.isArray(imagenes) ? imagenes.map((img) => import.meta.env.VITE_IMG_URL + img) : []; //array de url de imagenes
         //array de url de imagenes
         this.SKU = SKU; 
     }

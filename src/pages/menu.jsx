@@ -645,7 +645,7 @@ function RenderMenu() {
                         <div className="flex h-32">
                           <div className="w-1/2 bg-gray-200 rounded-2xl relative">
                             <img
-                              src={`${import.meta.env.VITE_IMG_URL}${item.imagenes[0]}` || null}
+                              src={`${item.imagenes[0]}` || null}
                               alt={item.nombre || null}
                               className="w-full h-full object-cover rounded-lg"
                             ></img>
